@@ -68,7 +68,7 @@ fun SearchBar(
             .focusRequester(focusRequester = focusRequester),
         textStyle = TextStyle(
             fontSize = 16.sp,
-            lineHeight = 22.sp,
+            lineHeight = 30.sp,
             color = normalGray
         ),
         singleLine = true,
@@ -84,7 +84,7 @@ fun SearchBar(
                 text = hint,
                 color = normalGray,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 16.sp,
             )
         },
         keyboardOptions = KeyboardOptions.Default.copy(

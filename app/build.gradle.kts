@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -81,6 +82,12 @@ dependencies {
     //hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    // Navigation with Compose
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    // Glide with Compose
+    implementation("com.github.skydoves:landscapist-glide:2.1.13")
 }
 
 // Allow references to generated code
