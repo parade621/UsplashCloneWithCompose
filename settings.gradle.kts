@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "willog_Unsplash"
 include(":app")
 include(":core")
+include(":navigation")

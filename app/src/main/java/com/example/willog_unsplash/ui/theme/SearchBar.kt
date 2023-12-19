@@ -60,14 +60,13 @@ fun SearchBar(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .shadow(2.dp, RoundedCornerShape(20.dp), true)
             .background(
                 color = lightGray,
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(10.dp),
             )
             .focusRequester(focusRequester = focusRequester),
         textStyle = TextStyle(
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             lineHeight = 30.sp,
             color = normalGray
         ),

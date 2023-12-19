@@ -4,41 +4,42 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.willog_unsplash.R
 
 @Composable
-fun BookMark(
-    modifier: Modifier = Modifier,
-    isBookMark: Boolean = true
-) {
-
+fun BookMarkBtn() {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .background(Color.Transparent)
+        modifier = Modifier
+            .shadow(2.dp, CircleShape)
+            .background(
+                color = Color.White,
+                shape = CircleShape
+            )
             .clickable(
                 onClick = { /* TODO */ },
             )
+            .padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.vector_favorite),
-            contentDescription = "BookMark",
-            modifier = modifier
-                .size(24.dp)
+            imageVector = Icons.Default.FavoriteBorder,
+            contentDescription = "BookMark"
         )
     }
 }
 
 @Preview
 @Composable
-fun PreviewBookMark() {
-    BookMark()
+fun PreviewBookMarkBtn() {
+    BookMarkBtn()
 }
