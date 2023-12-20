@@ -7,4 +7,7 @@ sealed class Screens(val route: String) {
 
     object SearchScreen : NoArgumentsScreen("search")
 
+    object DetailScreen : NoArgumentsScreen("detail")
+
+    object BookMarkScreen : NoArgumentsScreen("bookmarks")
 }

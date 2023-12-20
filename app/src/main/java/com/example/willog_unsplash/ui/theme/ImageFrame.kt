@@ -14,18 +14,20 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun ImageFrame(
+    image: String = "",
     modifier: Modifier = Modifier,
+    onEvent : () -> Unit = {}
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .background(lightGray)
             .clickable(
                 onClick = { /*TODO*/ }
             )
     ) {
         GlideImage(
-            imageModel = { /*이미지 url*/ },
+            imageModel = { image },
             modifier = Modifier.size(32.dp),
             previewPlaceholder = /*이미지가 없을 때*/ R.drawable.ic_launcher_foreground,
         )

@@ -44,11 +44,13 @@ fun CustomTopAppBar(title: String, hasBookMark: Boolean = false) {
                             .align(Alignment.CenterVertically)
                     )
                     Spacer(Modifier.weight(1f))
-                    BookMark(
-                        modifier = Modifier
-                            .size(30.dp)
-                    )
-                    Spacer(Modifier.width(12.dp))
+                    if (hasBookMark) {
+                        BookMark(
+                            modifier = Modifier
+                                .size(30.dp)
+                        )
+                        Spacer(Modifier.width(12.dp))
+                    }
                 }
             }
         )
