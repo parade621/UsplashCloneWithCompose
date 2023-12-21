@@ -51,6 +51,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.navigation.Screens
 import com.example.willog_unsplash.ui.components.CustomTopAppBar
@@ -107,9 +109,12 @@ fun Unsplash() {
                 hasBookMark.value = true
                 val viewModel: SearchViewModel = hiltViewModel()
                 val state = viewModel.state.collectAsStateWithLifecycle().value
+                val lazyPagingItems = viewModel.searchPagingResult.collectAsLazyPagingItems()
+
                 SearchScreen(
                     state = state,
-                    onEvent = viewModel::onEvent
+                    onEvent = viewModel::onEvent,
+                    lazyPagingItems = lazyPagingItems
                 )
             }
 
@@ -160,11 +165,10 @@ fun BaseScreen(
 @Composable
 fun SearchScreen(
     state: SearchState = SearchState(),
-    onEvent: (SearchEvent) -> Unit = { }
+    onEvent: (SearchEvent) -> Unit = { },
+    lazyPagingItems: LazyPagingItems<PhotoData>
 ) {
     val query = rememberSaveable { mutableStateOf("") }
-    val images =
-        remember { mutableStateListOf<PhotoData>() } // Assuming PhotoData has a 'url' and 'id' property
 
     Column {
         Box(
@@ -188,8 +192,9 @@ fun SearchScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-                items(images.size) { index ->
-                    ImageFrame(/*image = image.url*/) {
+                items(lazyPagingItems.itemCount) { index ->
+                    val photoData = lazyPagingItems[index]
+                    ImageFrame(image = photoData?.urls?.raw ?: "") {
                         //navController.navigate("details/${image.id}")
                     }
                 }

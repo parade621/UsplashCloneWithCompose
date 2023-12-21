@@ -44,25 +44,23 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchImage(query: String) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                photoSearchRepo.searchPhotos(query,1,4)
-            }.onSuccess {
-                Timber.e("성공: $it")
-            }.onFailure {
-                Timber.e("실패: $it")
-            }
-        }
-
-//        viewModelScope.launch(Dispatchers.IO) {
-//            photoSearchRepo.searchPhotosPaging(query)
-//                .cachedIn(viewModelScope)
-//                .collect {
-//                    _searchPagingResult.value = it
-//                }
-//
-//            Timber.e("확인: ${_searchPagingResult.value}")
+//        viewModelScope.launch {
+//            kotlin.runCatching {
+//                photoSearchRepo.searchPhotos(query,1,4)
+//            }.onSuccess {reponse->
+//                Timber.e("성공: ${reponse.body()?.results}")
+//            }.onFailure {
+//                Timber.e("실패: $it")
+//            }
 //        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            photoSearchRepo.searchPhotosPaging(query)
+                .cachedIn(viewModelScope)
+                .collect {
+                    _searchPagingResult.value = it
+                }
+        }
     }
 
     private fun clickImage() {

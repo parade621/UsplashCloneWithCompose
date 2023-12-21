@@ -124,7 +124,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 
     // Paging
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
 
     // Room
     val roomVersion = "2.4.3"
