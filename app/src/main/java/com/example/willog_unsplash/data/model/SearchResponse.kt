@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Photos(
+data class SearchResponse(
     @field:Json(name = "total")
     val total: Int,
     @field:Json(name = "total_pages")

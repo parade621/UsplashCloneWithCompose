@@ -10,10 +10,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryMoule {
+abstract class RepositoryModule {
+
     @Singleton
     @Binds
     abstract fun bindPhotoRepository(
         photoRepositoryImpl: PhotoSearchRepoImpl
     ): PhotoSearchRepo
+
 }

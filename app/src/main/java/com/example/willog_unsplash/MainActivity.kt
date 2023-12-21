@@ -1,26 +1,44 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.willog_unsplash
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
@@ -46,8 +64,9 @@ import com.example.willog_unsplash.ui.theme.backGround
 import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -134,20 +153,6 @@ fun BaseScreen(
             ) {
                 content(paddingValues)
             }
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /* 클릭 시 수행할 액션 */ },
-                shape = CircleShape,
-                containerColor = Color.White,
-            ) {
-                Icon(
-                    Icons.Filled.FavoriteBorder,
-                    contentDescription = "BookMark",
-                    tint = Color.Red
-                )
-            }
         }
     )
 }
@@ -157,7 +162,7 @@ fun SearchScreen(
     state: SearchState = SearchState(),
     onEvent: (SearchEvent) -> Unit = { }
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
+    val query = rememberSaveable { mutableStateOf("") }
     val images =
         remember { mutableStateListOf<PhotoData>() } // Assuming PhotoData has a 'url' and 'id' property
 
@@ -169,11 +174,16 @@ fun SearchScreen(
         ) {
             SearchBar(
                 hint = "Search",
+                text = query.value,
                 modifier = Modifier,
                 focusRequester = FocusRequester(),
-                getNewString = { /* handle new string */ },
-                visualTransformation = VisualTransformation.None
-            )
+                visualTransformation = VisualTransformation.None,
+                getNewString = { newText ->
+                    query.value = newText
+                }
+            ) {
+                onEvent(SearchEvent.GetSearchQuery(query.value))
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -188,40 +198,60 @@ fun SearchScreen(
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailsScreen(navController: NavController, imageId: String?) {
     // TODO: API를 통해 상세 이미지 정보를 가져오기
     // imageId를 사용하여 특정 이미지의 상세 정보를 표시
     Column {
-        Spacer(modifier = Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-        ) {
-            ImageFrame(/*image = image.url*/
-                modifier = Modifier
-                    .fillMaxHeight(0.5f)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-            ) {
-                //navController.navigate("details/${image.id}")
+        Scaffold(
+            floatingActionButtonPosition = FabPosition.End,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { /* 클릭 시 수행할 액션 */ },
+                    shape = CircleShape,
+                    containerColor = Color.White,
+                ) {
+                    Icon(
+                        Icons.Filled.FavoriteBorder,
+                        contentDescription = "BookMark",
+                        tint = Color.Red
+                    )
+                }
             }
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .background(Color.White, shape = RoundedCornerShape(10.dp)),
         ) {
-            DetailInfo(type = "ID", value = "value")
-            Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-            DetailInfo(type = "Author", value = "value")
-            Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-            DetailInfo(type = "Size", value = "value")
-            Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-            DetailInfo(type = "Created At", value = "value")
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                ) {
+                    ImageFrame(/*image = image.url*/
+                        modifier = Modifier
+                            .fillMaxHeight(0.5f)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                    ) {
+                        //navController.navigate("details/${image.id}")
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .background(Color.White, shape = RoundedCornerShape(10.dp)),
+                ) {
+                    DetailInfo(type = "ID", value = "value")
+                    Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
+                    DetailInfo(type = "Author", value = "value")
+                    Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
+                    DetailInfo(type = "Size", value = "value")
+                    Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
+                    DetailInfo(type = "Created At", value = "value")
+                }
+            }
         }
     }
 }

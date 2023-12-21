@@ -1,8 +1,10 @@
 package com.example.willog_unsplash.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -46,8 +48,9 @@ fun SearchBar(
     text: String = "",
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester,
+    visualTransformation: VisualTransformation,
     getNewString: (String) -> Unit,
-    visualTransformation: VisualTransformation
+    onEvent: (String) -> Unit = {},
 ) {
     OutlinedTextField(
         value = text,
@@ -77,6 +80,10 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search Icon",
+                modifier = Modifier
+                    .clickable {
+                        onEvent(text)
+                    }
             )
         },
         placeholder = {
@@ -88,9 +95,12 @@ fun SearchBar(
             )
         },
         keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Next,
-            keyboardType = KeyboardType.Email
+            imeAction = ImeAction.Search,
+            keyboardType = KeyboardType.Text
         ),
-        visualTransformation = visualTransformation
+        visualTransformation = visualTransformation,
+        keyboardActions = KeyboardActions(onSearch = { // '검색' 버튼 액션 정의
+            onEvent(text)
+        })
     )
 }

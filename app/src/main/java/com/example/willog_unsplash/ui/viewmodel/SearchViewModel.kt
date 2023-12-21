@@ -11,10 +11,13 @@ import com.example.willog_unsplash.ui.events.BookmarkEvent
 import com.example.willog_unsplash.ui.events.SearchEvent
 import com.example.willog_unsplash.ui.states.SearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,12 +44,28 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchImage(query: String) {
-        viewModelScope.launch {
-            photoSearchRepo.searchPhotosPaging(query)
+        _state.update {
+            it.copy(query = query)
+        }
+
+//        viewModelScope.launch {
+//            kotlin.runCatching {
+//                photoSearchRepo.searchPhotos(query,1,20)
+//            }.onSuccess {
+//                Timber.e("성공: $it")
+//            }.onFailure {
+//                Timber.e("실패: $it")
+//            }
+//        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            photoSearchRepo.searchPhotosPaging(_state.value.query)
                 .cachedIn(viewModelScope)
                 .collect {
                     _searchPagingResult.value = it
                 }
+
+            Timber.e("확인: ${_searchPagingResult.value}")
         }
     }
 
