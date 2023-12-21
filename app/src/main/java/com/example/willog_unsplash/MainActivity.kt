@@ -3,6 +3,7 @@ package com.example.willog_unsplash
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,20 +27,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.willog_unsplash.data.PhotoData
+import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.navigation.Screens
-import com.example.willog_unsplash.ui.theme.CustomTopAppBar
-import com.example.willog_unsplash.ui.theme.DetailInfo
-import com.example.willog_unsplash.ui.theme.ImageFrame
-import com.example.willog_unsplash.ui.theme.SearchBar
+import com.example.willog_unsplash.ui.components.CustomTopAppBar
+import com.example.willog_unsplash.ui.components.DetailInfo
+import com.example.willog_unsplash.ui.components.ImageFrame
+import com.example.willog_unsplash.ui.components.SearchBar
+import com.example.willog_unsplash.ui.events.SearchEvent
+import com.example.willog_unsplash.ui.states.SearchState
 import com.example.willog_unsplash.ui.theme.Willog_UnsplashTheme
 import com.example.willog_unsplash.ui.theme.backGround
+import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -71,14 +79,19 @@ fun Unsplash() {
         hasBookMark = hasBookMark.value
     ) { paddingValues ->
 
-        NavHost(navController = navController, startDestination = Screens.DetailScreen.route) {
+        NavHost(navController = navController, startDestination = Screens.SearchScreen.route) {
 
             composable(
                 route = Screens.SearchScreen.route
             ) {
                 title.value = "Search"
                 hasBookMark.value = true
-                SearchScreen(navController)
+                val viewModel: SearchViewModel = hiltViewModel()
+                val state = viewModel.state.collectAsStateWithLifecycle().value
+                SearchScreen(
+                    state = state,
+                    onEvent = viewModel::onEvent
+                )
             }
 
             composable(
@@ -140,7 +153,10 @@ fun BaseScreen(
 }
 
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen(
+    state: SearchState = SearchState(),
+    onEvent: (SearchEvent) -> Unit = { }
+) {
     var query by rememberSaveable { mutableStateOf("") }
     val images =
         remember { mutableStateListOf<PhotoData>() } // Assuming PhotoData has a 'url' and 'id' property
