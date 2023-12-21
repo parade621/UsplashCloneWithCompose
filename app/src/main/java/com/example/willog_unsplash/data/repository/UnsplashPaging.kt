@@ -10,18 +10,14 @@ import timber.log.Timber
 
 class UnsplashPaging(
     private val api: UnsplashApi,
-    private val query: String,
+    private val query: String
 ) : PagingSource<Int, PhotoData>() {
-
-    init{
-        Timber.e("와우2 $api $query")
-    }
 
     override fun getRefreshKey(state: PagingState<Int, PhotoData>): Int? {
         Timber.e("와우3")
         return state.anchorPosition?.let { anchorPosition ->
-            val page = state.closestPageToPosition(anchorPosition)
-            page?.prevKey?.plus(1) ?: page?.nextKey?.minus(1)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
