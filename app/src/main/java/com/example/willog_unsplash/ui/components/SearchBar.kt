@@ -72,7 +72,7 @@ fun SearchBar(
         textStyle = TextStyle(
             fontSize = 20.sp,
             lineHeight = 30.sp,
-            color = normalGray
+            color = Color.Black
         ),
         singleLine = true,
         maxLines = 1,

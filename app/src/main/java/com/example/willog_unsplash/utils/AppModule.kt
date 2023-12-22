@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.willog_unsplash.data.api.UnsplashApi
 import com.example.willog_unsplash.data.db.PhotoDatabase
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,10 @@ object AppModule {
     fun provideApiService(retrofit: Retrofit): UnsplashApi {
         return retrofit.create(UnsplashApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi = Moshi.Builder().build()
 
     // Room
     @Singleton

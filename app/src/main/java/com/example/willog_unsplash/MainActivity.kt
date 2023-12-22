@@ -3,6 +3,7 @@
 package com.example.willog_unsplash
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,12 +47,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -58,6 +62,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.willog_unsplash.data.model.PhotoData
+import com.example.willog_unsplash.navigation.AppNavigator
+import com.example.willog_unsplash.navigation.NavigationIntent
 import com.example.willog_unsplash.navigation.Screens
 import com.example.willog_unsplash.ui.components.CustomTopAppBar
 import com.example.willog_unsplash.ui.components.DetailInfo
@@ -65,14 +71,22 @@ import com.example.willog_unsplash.ui.components.ErrorScreen
 import com.example.willog_unsplash.ui.components.ImageFrame
 import com.example.willog_unsplash.ui.components.LoadingWheel
 import com.example.willog_unsplash.ui.components.SearchBar
+import com.example.willog_unsplash.ui.events.DetailEvent
 import com.example.willog_unsplash.ui.events.SearchEvent
+import com.example.willog_unsplash.ui.states.DetailState
 import com.example.willog_unsplash.ui.states.SearchState
 import com.example.willog_unsplash.ui.theme.Willog_UnsplashTheme
 import com.example.willog_unsplash.ui.theme.backGround
+import com.example.willog_unsplash.ui.viewmodel.DetailViewModel
+import com.example.willog_unsplash.ui.viewmodel.RootViewModel
 import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import timber.log.Timber
+import java.net.URLEncoder
 
+const val IntentValue = "IntentValue"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -93,9 +107,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Unsplash() {
-    val navController = rememberNavController()
+fun Unsplash(
+    rootViewModel: RootViewModel = hiltViewModel(),
+) {
 
+    val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val title = remember { mutableStateOf("App Title") }
@@ -106,6 +122,11 @@ fun Unsplash() {
         title = title.value,
         hasBookMark = hasBookMark.value
     ) { paddingValues ->
+
+        NavigationEffects(
+            navigationChannel = rootViewModel.navigationChannel,
+            navHostController = navController
+        )
 
         NavHost(navController = navController, startDestination = Screens.SearchScreen.route) {
 
@@ -126,11 +147,21 @@ fun Unsplash() {
             }
 
             composable(
-                route = Screens.DetailScreen.route
+                route = Screens.DetailScreen.route.plus("/{$IntentValue}")
             ) { backStackEntry ->
                 title.value = "Details"
                 hasBookMark.value = false
-                DetailsScreen(navController, backStackEntry.arguments?.getString("imageId"))
+
+                val viewModel: DetailViewModel = hiltViewModel()
+                viewModel.onEvent(
+                    DetailEvent.FetchPhotoInfo(
+                        backStackEntry.arguments?.getString(
+                            IntentValue
+                        ) ?: ""
+                    )
+                )
+                val state = viewModel.state.collectAsStateWithLifecycle().value
+                DetailsScreen(state = state, onEvent = viewModel::onEvent)
             }
 
             composable(
@@ -203,6 +234,23 @@ fun SearchScreen(
         // Component로 분리 예정
         if (state.isSearching) {
             // 지금 로딩하면 화면 깜빡거림 이거 수정 필요
+            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+                items(lazyPagingItems.itemCount, key = { index ->
+                    lazyPagingItems.peek(index)?.id ?: index
+                }) { index ->
+                    val photoData = lazyPagingItems[index]
+                    ImageFrame(
+                        image = photoData?.urls?.small ?: "",
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .border(0.5.dp, Color.White)
+                    ) {
+                        if (photoData != null)
+                            onEvent(SearchEvent.ClickImage(photoData))
+                    }
+                }
+            }
+
             when {
                 lazyPagingItems.loadState.append is LoadState.Loading -> {
                     LoadingWheel()
@@ -217,31 +265,16 @@ fun SearchScreen(
                     ErrorScreen(error = e.error)
                 }
             }
-
-            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-                items(lazyPagingItems.itemCount, key = { index ->
-                    lazyPagingItems.peek(index)?.id ?: index
-                }) { index ->
-                    val photoData = lazyPagingItems[index]
-                    ImageFrame(
-                        image = photoData?.urls?.small ?: "",
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .border(0.5.dp, Color.White)
-                    ) {
-                        //navController.navigate("details/${image.id}")
-                    }
-                }
-            }
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailsScreen(navController: NavController, imageId: String?) {
-    // TODO: API를 통해 상세 이미지 정보를 가져오기
-    // imageId를 사용하여 특정 이미지의 상세 정보를 표시
+fun DetailsScreen(
+    state: DetailState = DetailState(),
+    onEvent: (DetailEvent) -> Unit
+) {
     Column {
         Scaffold(
             floatingActionButtonPosition = FabPosition.End,
@@ -267,13 +300,12 @@ fun DetailsScreen(navController: NavController, imageId: String?) {
                         .padding(12.dp),
                 ) {
                     ImageFrame(/*image = image.url*/
+                        image = state.photoInfo!!.urls.raw,
                         modifier = Modifier
                             .fillMaxHeight(0.5f)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
-                    ) {
-                        //navController.navigate("details/${image.id}")
-                    }
+                    )
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Column(
@@ -282,13 +314,16 @@ fun DetailsScreen(navController: NavController, imageId: String?) {
                         .padding(12.dp)
                         .background(Color.White, shape = RoundedCornerShape(10.dp)),
                 ) {
-                    DetailInfo(type = "ID", value = "value")
+                    DetailInfo(type = "ID", value = state.photoInfo!!.id)
                     Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-                    DetailInfo(type = "Author", value = "value")
+                    DetailInfo(type = "Author", value = state.photoInfo.user.username)
                     Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-                    DetailInfo(type = "Size", value = "value")
+                    DetailInfo(
+                        type = "Size",
+                        value = "${state.photoInfo.width} x ${state.photoInfo.height}"
+                    )
                     Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
-                    DetailInfo(type = "Created At", value = "value")
+                    DetailInfo(type = "Created At", value = state.photoInfo.created_at)
                 }
             }
         }
@@ -306,6 +341,50 @@ fun BookmarksScreen(navController: NavController) {
         items(images.size) { index ->
             ImageFrame(/*image = image.url*/) {
                 //navController.navigate("details/${image.id}")
+            }
+        }
+    }
+}
+
+@Composable
+fun NavigationEffects(
+    navigationChannel: Channel<NavigationIntent>,
+    navHostController: NavHostController
+) {
+    val activity = (LocalContext.current as? Activity)
+
+    LaunchedEffect(activity, navHostController, navigationChannel) {
+
+        navigationChannel.receiveAsFlow().collect { intent ->
+            if (activity?.isFinishing == true) {
+                return@collect
+            }
+            when (intent) {
+                is NavigationIntent.NavigateBack -> {
+                    if (intent.route != null) {
+                        navHostController.popBackStack(intent.route, intent.inclusive)
+                    } else {
+
+                        navHostController.popBackStack()
+                    }
+                }
+
+                is NavigationIntent.NavigateTo -> {
+                    val route = if (intent.extra.isNotEmpty()) {
+                        val extra = URLEncoder.encode(intent.extra, "UTF-8")
+                        intent.route + "/" + extra
+                    } else {
+                        intent.route
+                    }
+
+                    navHostController.navigate(route) {
+                        launchSingleTop = intent.isSingleTop
+                        intent.popUpToRoute?.let { popUpToRoute ->
+                            popUpTo(popUpToRoute) { inclusive = intent.inclusive }
+                        }
+                    }
+
+                }
             }
         }
     }

@@ -8,9 +8,11 @@ import androidx.paging.cachedIn
 import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.data.repository.PhotoSearchRepo
 import com.example.willog_unsplash.navigation.AppNavigator
+import com.example.willog_unsplash.navigation.Screens
 import com.example.willog_unsplash.ui.events.BookmarkEvent
 import com.example.willog_unsplash.ui.events.SearchEvent
 import com.example.willog_unsplash.ui.states.SearchState
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 import javax.xml.transform.Transformer
@@ -27,8 +30,9 @@ import javax.xml.transform.Transformer
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val appNavigator: AppNavigator,
-    private val photoSearchRepo: PhotoSearchRepo
-) : BaseViewModel(appNavigator) {
+    private val photoSearchRepo: PhotoSearchRepo,
+    private val moshi: Moshi
+) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
@@ -41,7 +45,7 @@ class SearchViewModel @Inject constructor(
     fun onEvent(event: SearchEvent) {
         when (event) {
             is SearchEvent.GetSearchQuery -> searchImage(event.query)
-            is SearchEvent.ClickImage -> clickImage()
+            is SearchEvent.ClickImage -> clickImage(event.selectedImage)
             is SearchEvent.ClickBookMark -> clickBookMark()
         }
     }
@@ -59,12 +63,26 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun clickImage() {
-        /* TODO */
+    private fun clickImage(selectedImage: PhotoData) {
+
+        val adapter = moshi.adapter(PhotoData::class.java)
+        val photoData = adapter.toJson(selectedImage)
+
+        appNavigator.tryNavigateTo(
+            Screens.DetailScreen(),
+            popUpToRoute = Screens.SearchScreen(),
+            extra = photoData
+        )
     }
 
     private fun clickBookMark() {
-        /* TODO */
+        appNavigator.tryNavigateTo(
+            Screens.BookMarkScreen(),
+            popUpToRoute = Screens.SearchScreen(),
+        )
     }
 
+    private fun navBack() {
+        appNavigator.tryNavigateBack()
+    }
 }

@@ -5,13 +5,11 @@ import com.example.willog_unsplash.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+
 @HiltViewModel
-open class BaseViewModel @Inject constructor(
-    private val appNavigator: AppNavigator,
+class RootViewModel @Inject constructor(
+    appNavigator: AppNavigator
 ) : ViewModel() {
 
-    fun navBack() {
-        appNavigator.tryNavigateBack()
-    }
-
+    val navigationChannel = appNavigator.navigationChannel
 }

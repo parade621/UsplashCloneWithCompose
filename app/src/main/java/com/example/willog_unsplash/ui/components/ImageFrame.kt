@@ -27,10 +27,7 @@ fun ImageFrame(
         modifier = modifier
             .background(lightGray)
             .clickable(
-                onClick = {
-                    /*TODO*/
-                    Timber.e("클릭: $image")
-                }
+                onClick = onEvent
             )
     ) {
         GlideImage(
