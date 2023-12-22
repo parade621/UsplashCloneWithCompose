@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.willog_unsplash.R
 import com.example.willog_unsplash.ui.theme.lightGray
 import com.skydoves.landscapist.glide.GlideImage
+import timber.log.Timber
 
 @Composable
 fun ImageFrame(
@@ -26,7 +27,10 @@ fun ImageFrame(
         modifier = modifier
             .background(lightGray)
             .clickable(
-                onClick = { /*TODO*/ }
+                onClick = {
+                    /*TODO*/
+                    Timber.e("클릭: $image")
+                }
             )
     ) {
         GlideImage(

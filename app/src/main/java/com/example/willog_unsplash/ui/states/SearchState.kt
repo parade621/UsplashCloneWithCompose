@@ -4,6 +4,5 @@ import androidx.paging.PagingData
 import com.example.willog_unsplash.data.model.PhotoData
 
 data class SearchState(
-    val isLoading: Boolean = false,
-    val error: String = ""
+    val isSearching: Boolean = false,
 )

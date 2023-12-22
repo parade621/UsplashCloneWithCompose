@@ -2,6 +2,7 @@ package com.example.willog_unsplash.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.willog_unsplash.data.model.PhotoData
@@ -16,10 +17,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import javax.xml.transform.Transformer
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -44,11 +47,14 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchImage(query: String) {
+
+        _state.update { it.copy(isSearching = true) }
+
         viewModelScope.launch(Dispatchers.IO) {
             photoSearchRepo.searchPhotosPaging(query)
                 .cachedIn(viewModelScope)
-                .collect {
-                    _searchPagingResult.value = it
+                .collect { pagingData ->
+                    _searchPagingResult.value = pagingData
                 }
         }
     }

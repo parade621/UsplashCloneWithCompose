@@ -26,7 +26,6 @@ class PhotoSearchRepoImpl @Inject constructor(
         perPage: Int
     ): Response<SearchResponse> =
         withContext(Dispatchers.IO) {
-            Timber.e("검색 수행")
             api.searchPhotos(query, page, perPage).body()?.let {
                 Response.success(it)
             } ?: Response.error(404, null)
@@ -41,9 +40,8 @@ class PhotoSearchRepoImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
-                prefetchDistance = 3,
-                enablePlaceholders = false, // true로 변경
-                maxSize = PAGING_SIZE * 3
+                enablePlaceholders = true, // true로 변경
+                maxSize = PAGING_SIZE * 8
             ),
             pagingSourceFactory = {
                 UnsplashPaging(api, query)

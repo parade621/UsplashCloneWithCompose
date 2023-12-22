@@ -54,13 +54,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.navigation.Screens
 import com.example.willog_unsplash.ui.components.CustomTopAppBar
 import com.example.willog_unsplash.ui.components.DetailInfo
+import com.example.willog_unsplash.ui.components.ErrorScreen
 import com.example.willog_unsplash.ui.components.ImageFrame
+import com.example.willog_unsplash.ui.components.LoadingWheel
 import com.example.willog_unsplash.ui.components.SearchBar
 import com.example.willog_unsplash.ui.events.SearchEvent
 import com.example.willog_unsplash.ui.states.SearchState
@@ -175,6 +178,7 @@ fun SearchScreen(
     val query = rememberSaveable { mutableStateOf("") }
 
     Column {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,16 +200,37 @@ fun SearchScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-            items(lazyPagingItems.itemCount) { index ->
-                val photoData = lazyPagingItems[index]
-                ImageFrame(
-                    image = photoData?.urls?.small ?: "",
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .border(0.5.dp, Color.White)
-                ) {
-                    //navController.navigate("details/${image.id}")
+        // Component로 분리 예정
+        if (state.isSearching) {
+            // 지금 로딩하면 화면 깜빡거림 이거 수정 필요
+            when {
+                lazyPagingItems.loadState.append is LoadState.Loading -> {
+                    LoadingWheel()
+                }
+
+                lazyPagingItems.loadState.refresh is LoadState.Loading -> {
+                    LoadingWheel()
+                }
+
+                lazyPagingItems.loadState.refresh is LoadState.Error -> {
+                    val e = lazyPagingItems.loadState.refresh as LoadState.Error
+                    ErrorScreen(error = e.error)
+                }
+            }
+
+            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+                items(lazyPagingItems.itemCount, key = { index ->
+                    lazyPagingItems.peek(index)?.id ?: index
+                }) { index ->
+                    val photoData = lazyPagingItems[index]
+                    ImageFrame(
+                        image = photoData?.urls?.small ?: "",
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .border(0.5.dp, Color.White)
+                    ) {
+                        //navController.navigate("details/${image.id}")
+                    }
                 }
             }
         }
