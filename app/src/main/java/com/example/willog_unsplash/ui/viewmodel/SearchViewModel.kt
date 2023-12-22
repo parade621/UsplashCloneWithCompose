@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -32,7 +33,6 @@ class SearchViewModel @Inject constructor(
     // Paging
     private val _searchPagingResult: MutableStateFlow<PagingData<PhotoData>> =
         MutableStateFlow<PagingData<PhotoData>>(PagingData.empty())
-
     val searchPagingResult: StateFlow<PagingData<PhotoData>> = _searchPagingResult.asStateFlow()
 
     fun onEvent(event: SearchEvent) {
@@ -44,16 +44,6 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchImage(query: String) {
-//        viewModelScope.launch {
-//            kotlin.runCatching {
-//                photoSearchRepo.searchPhotos(query,1,4)
-//            }.onSuccess {reponse->
-//                Timber.e("성공: ${reponse.body()?.results}")
-//            }.onFailure {
-//                Timber.e("실패: $it")
-//            }
-//        }
-
         viewModelScope.launch(Dispatchers.IO) {
             photoSearchRepo.searchPhotosPaging(query)
                 .cachedIn(viewModelScope)

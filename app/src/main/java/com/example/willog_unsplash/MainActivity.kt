@@ -7,10 +7,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -65,6 +68,7 @@ import com.example.willog_unsplash.ui.theme.Willog_UnsplashTheme
 import com.example.willog_unsplash.ui.theme.backGround
 import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -188,15 +192,20 @@ fun SearchScreen(
             ) {
                 onEvent(SearchEvent.GetSearchQuery(query.value))
             }
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-                items(lazyPagingItems.itemCount) { index ->
-                    val photoData = lazyPagingItems[index]
-                    ImageFrame(image = photoData?.urls?.raw ?: "") {
-                        //navController.navigate("details/${image.id}")
-                    }
+        LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+            items(lazyPagingItems.itemCount) { index ->
+                val photoData = lazyPagingItems[index]
+                ImageFrame(
+                    image = photoData?.urls?.small ?: "",
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .border(0.5.dp, Color.White)
+                ) {
+                    //navController.navigate("details/${image.id}")
                 }
             }
         }

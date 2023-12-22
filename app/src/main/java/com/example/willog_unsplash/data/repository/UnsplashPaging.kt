@@ -14,7 +14,6 @@ class UnsplashPaging(
 ) : PagingSource<Int, PhotoData>() {
 
     override fun getRefreshKey(state: PagingState<Int, PhotoData>): Int? {
-        Timber.e("와우3")
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
@@ -22,11 +21,9 @@ class UnsplashPaging(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PhotoData> {
-        Timber.e("와우4")
         val pageNumber = params.key ?: START_PAGE_INDEX
 
         return try {
-
             val response: Response<SearchResponse> =
                 api.searchPhotos(query, pageNumber, params.loadSize)
             val data: List<PhotoData> = response.body()?.results.orEmpty()

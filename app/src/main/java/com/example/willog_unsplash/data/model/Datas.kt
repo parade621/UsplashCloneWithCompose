@@ -34,7 +34,9 @@ data class PhotoData(
 
 @JsonClass(generateAdapter = true)
 data class Urls(
-    val raw: String
+    val raw: String,
+    val small: String,
+    val thumb: String
 )
 
 @JsonClass(generateAdapter = true)
