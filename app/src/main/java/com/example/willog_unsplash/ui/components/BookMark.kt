@@ -17,7 +17,8 @@ import com.example.willog_unsplash.R
 @Composable
 fun BookMark(
     modifier: Modifier = Modifier,
-    isBookMark: Boolean = true
+    isBookMark: Boolean = true,
+    onBookMarkClick: () -> Unit = {}
 ) {
 
     Box(
@@ -25,7 +26,7 @@ fun BookMark(
         modifier = modifier
             .background(Color.Transparent)
             .clickable(
-                onClick = { /* TODO */ },
+                onClick = onBookMarkClick,
             )
     ) {
         Image(
