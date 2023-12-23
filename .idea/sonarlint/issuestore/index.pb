@@ -267,3 +267,5 @@ z
 Japp/src/main/java/com/example/willog_unsplash/ui/components/EmptyScreen.kt,1/f/1f193b2d3a29e2656e94dce6326e598351a8b1ac
 u
 Eapp/src/main/java/com/example/willog_unsplash/data/api/UnsplashApi.kt,0/b/0b31a43a82df0ac473efa4d5f9a7c96b93cde65a
+z
+Japp/src/main/java/com/example/willog_unsplash/ui/components/ErrorScreen.kt,d/4/d40cbc33e7d5da1af85dc32dba0f6a5a77c11618

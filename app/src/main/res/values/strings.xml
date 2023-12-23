@@ -11,7 +11,7 @@
     <string name="size_text">Size</string>
     <string name="create_at_text">Create At</string>
 
-    <string name="bookmarked_toast">Bookmarking!!</string>
-    <string name="un_bookmarked_toast">Unbookmarking!!</string>
+    <string name="need_query_text">검색어를 입력해주세요.</string>
+    <string name="no_result_text">데이터가 없습니다.</string>
 
 </resources>

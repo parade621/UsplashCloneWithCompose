@@ -213,6 +213,7 @@ fun SearchScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+    val context = LocalContext.current
     val query = rememberSaveable { mutableStateOf("") }
 
     BaseScreen(
@@ -236,6 +237,10 @@ fun SearchScreen(
                         query.value = newText
                     }
                 ) {
+                    if(query.value.isEmpty()) {
+                        Toast.makeText(context, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                        return@SearchBar
+                    }
                     onEvent(SearchEvent.GetSearchQuery(query.value))
                     focusManager.clearFocus()
                 }
@@ -247,7 +252,7 @@ fun SearchScreen(
             if (state.isSearching) {
                 when (lazyPagingItems.itemCount) {
                     0 -> {
-                        //
+                        ErrorScreen(type = "empty", message = stringResource(id = R.string.no_result_text))
                     }
 
                     else -> LazyVerticalGridComponent(
@@ -268,7 +273,7 @@ fun SearchScreen(
 
                     lazyPagingItems.loadState.refresh is LoadState.Error -> {
                         val e = lazyPagingItems.loadState.refresh as LoadState.Error
-                        ErrorScreen(error = e.error)
+                        ErrorScreen(type = "error", message = e.error.message ?: "")
                     }
                 }
             }
