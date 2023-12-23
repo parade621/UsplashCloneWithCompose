@@ -11,8 +11,6 @@ n
 >app/src/main/java/com/example/willog_unsplash/ui/theme/Type.kt,0/e/0e2403ccc987efcb7d37e8e94d5a5d5f1b2b9ee5
 m
 =app/src/main/java/com/example/willog_unsplash/MainActivity.kt,2/9/298a2517e62f7185ab3c245e4dbe44698b9a922f
-n
->app/src/main/java/com/example/willog_unsplash/UnsplashClone.kt,1/1/11d5a339a3612a9dff598b7625f1aa9650a33d41
 S
 #.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
 ]
@@ -33,8 +31,6 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 x
 Happ/src/main/java/com/example/willog_unsplash/navigation/AppNavigator.kt,7/f/7f9a673a1d1a521861b16ff4ff7e7182af56d13b
-q
-Aapp/src/main/java/com/example/willog_unsplash/data/UnsplashApi.kt,4/8/48e85b19ced871f1f418b19dd3289e8f11610757
 p
 @app/src/main/java/com/example/willog_unsplash/utils/Constants.kt,b/d/bdeaf71a066346e8a3e6510e7ac976da47ee1286
 |
@@ -57,8 +53,6 @@ Mapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/SearchViewModel.kt,
 Mapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/DetailViewModel.kt,4/3/430b7a73cab5e3eb19e2c01726bacddfb949168e
 
 Oapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/BookmarkViewModel.kt,4/a/4aa56fefbc18bedc5dd0bb33d9f1cad2d0d8c2f9
-{
-Kapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/BaseViewModel.kt,3/8/388198f2d474ace0b212d6af2b14582ffb846084
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
@@ -67,8 +61,6 @@ P
 Oapp/src/main/java/com/example/willog_unsplash/data/repository/UnsplashPaging.kt,3/9/39f69a7165f0792626896079e6565a0c686975ea
 q
 Aapp/src/main/java/com/example/willog_unsplash/data/model/Datas.kt,2/e/2e7fea919353ad858e7f2306cbd3d15027909042
-r
-Bapp/src/main/java/com/example/willog_unsplash/data/model/photos.kt,1/1/11c23553df7ecfa215c35784c548f81dafe30fb6
 v
 Fapp/src/main/java/com/example/willog_unsplash/data/db/PhotoDatabase.kt,5/c/5c92e1cce5fcc1e5953c642f97a59177c891b449
 u
@@ -83,10 +75,6 @@ F
 app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
 p
 @app/src/main/java/com/example/willog_unsplash/utils/AppModule.kt,0/0/00ff4ecda96758c4307c8fdec8b53dca80510126
-q
-Aapp/src/main/java/com/example/willog_unsplash/UnsplashCloneApp.kt,f/a/faf6cff869b398c93df04941d51fe77bf7022f25
-v
-Fapp/src/main/java/com/example/willog_unsplash/utils/RepositoryMoule.kt,f/3/f329c929b60fe83c0533a283ececfebb7782d905
 n
 >app/src/main/java/com/example/willog_unsplash/MyApplication.kt,1/4/14ceb5765017a89fd69034a0c80c1ac01107c04b
 C
@@ -273,3 +261,9 @@ Q.idea/sonarlint/securityhotspotstore/f/3/f3a85af1776fbebcc08f355bd44250a3d38d1f
 Q.idea/sonarlint/securityhotspotstore/b/d/bdeaf71a066346e8a3e6510e7ac976da47ee1286,8/9/89ca102e6d5e1e931cef2118a5a8bf7e77d3df04
 Å
 Q.idea/sonarlint/securityhotspotstore/a/9/a9993f7a9f80c38504eb2cd31d1e16037eb02cc9,b/4/b4d2d97c64ca3a0e95ced98116ea4d93a1d4acac
+à
+Xapp/src/main/java/com/example/willog_unsplash/ui/components/LazyVerticalGridComponent.kt,4/a/4a666baa347a8d8bdf878541cd6f42e9b60a4f43
+z
+Japp/src/main/java/com/example/willog_unsplash/ui/components/EmptyScreen.kt,1/f/1f193b2d3a29e2656e94dce6326e598351a8b1ac
+u
+Eapp/src/main/java/com/example/willog_unsplash/data/api/UnsplashApi.kt,0/b/0b31a43a82df0ac473efa4d5f9a7c96b93cde65a

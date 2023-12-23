@@ -2,7 +2,6 @@ package com.example.willog_unsplash.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
@@ -10,7 +9,6 @@ import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.data.repository.PhotoSearchRepo
 import com.example.willog_unsplash.navigation.AppNavigator
 import com.example.willog_unsplash.navigation.Screens
-import com.example.willog_unsplash.ui.events.BookmarkEvent
 import com.example.willog_unsplash.ui.events.SearchEvent
 import com.example.willog_unsplash.ui.states.SearchState
 import com.squareup.moshi.Moshi
@@ -19,15 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
-import javax.xml.transform.Transformer
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -36,7 +30,7 @@ class SearchViewModel @Inject constructor(
     private val moshi: Moshi
 ) : ViewModel() {
 
-    private var dbDatas = setOf<String>()
+    private var dbData = setOf<String>()
 
     private val _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
@@ -59,8 +53,7 @@ class SearchViewModel @Inject constructor(
     private fun getBookmarkedPhotoId() {
         viewModelScope.launch(Dispatchers.IO) {
             val tmpData = photoSearchRepo.getAllBookmarkId()
-            dbDatas = tmpData.toSet()
-            Timber.e("갱신: $dbDatas")
+            dbData = tmpData.toSet()
 
         }
     }
@@ -74,7 +67,7 @@ class SearchViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .map { pagingData ->
                     pagingData.map { photo ->
-                        photo.copy(isBookmarked = dbDatas.contains(photo.id))
+                        photo.copy(isBookmarked = dbData.contains(photo.id))
                     }
                 }
                 .collect { pagingData ->

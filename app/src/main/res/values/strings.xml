@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">willog_Unsplash</string>
+    <string name="search_title">Search</string>
+    <string name="detail_title">Detail</string>
+    <string name="bookmark_title">Bookmark</string>
+
+    <string name="search_text">Search</string>
+
+    <string name="id_text">Id</string>
+    <string name="author_text">Author</string>
+    <string name="size_text">Size</string>
+    <string name="create_at_text">Create At</string>
+
+    <string name="bookmarked_toast">Bookmarking!!</string>
+    <string name="un_bookmarked_toast">Unbookmarking!!</string>
+
 </resources>

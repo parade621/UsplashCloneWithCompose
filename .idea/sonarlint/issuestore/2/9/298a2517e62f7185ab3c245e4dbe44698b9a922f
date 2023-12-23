@@ -1,14 +1,10 @@
 
-Mkotlin:S1172"(Remove these unused function parameters.(ë€¶ıÿÿÿÿ8Êô´ØÈ1
-Hkotlin:S1172À"(Remove these unused function parameters.(ßœª8šÿãÏÈ1
-[kotlin:S1172æ"6Remove this unused function parameter "navController".(¦ÚÉëúÿÿÿÿ8…ŞªØÈ1
-dkotlin:S1172P"@Use "_" instead of this unused lambda parameter "paddingValues".(˜ãú«şÿÿÿÿ8Ëô´ØÈ1
-Xkotlin:S1172í"8Use "_" instead of this unused lambda parameter "index".(åş¯8šÿãÏÈ1
-Xkotlin:S1172µ"8Use "_" instead of this unused lambda parameter "index".(åş¯8šÿãÏÈ1
->kotlin:S125¶"Remove this commented out code.(¦¦‰…8œÿãÏÈ1
-Ckotlin:S125Ğ"Remove this commented out code.(ôÈ½Ôşÿÿÿÿ8œÿãÏÈ1
->kotlin:S125î"Remove this commented out code.(¦¦‰…8œÿãÏÈ1
-Rkotlin:S1135Á"2Complete the task associated to this TODO comment.(±’‹‹8¡ÿãÏÈ1
-Rkotlin:S1135ë"2Complete the task associated to this TODO comment.(Éñç€8¡ÿãÏÈ1
-Jkotlin:S1481 "*Remove this unused "query" local variable.(ãÆ±8¡ÿãÏÈ1
-9kotlin:S1128"Remove this unused import.(ÜŞÍú8Öô´ØÈ1
+Skotlin:S1172ô".Remove this unused function parameter "state".(º•ÎÉøÿÿÿÿ8Í §½É1
+>kotlin:S1128"Remove this unused import.(Õ„´°ùÿÿÿÿ8Û §½É1
+>kotlin:S1128"Remove this unused import.(ê ıõûÿÿÿÿ8Û §½É1
+9kotlin:S1128"Remove this unused import.(¤½Ñâ8Û §½É1
+9kotlin:S1128"Remove this unused import.(Œ¯ñ¯8Û §½É1
+8kotlin:S1128"Remove this unused import.(”ƒn8Û §½É1
+9kotlin:S1128&"Remove this unused import.(øËÁ8Û §½É1
+9kotlin:S1128'"Remove this unused import.(£¤8Û §½É1
+rkotlin:S3776ˆ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÿ€Œ½8İ §½É1

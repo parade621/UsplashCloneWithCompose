@@ -5,10 +5,12 @@ package com.example.willog_unsplash
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -47,6 +49,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -207,15 +211,16 @@ fun SearchScreen(
     onEvent: (SearchEvent) -> Unit = { },
     lazyPagingItems: LazyPagingItems<PhotoData>
 ) {
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     val query = rememberSaveable { mutableStateOf("") }
 
     BaseScreen(
-        title = "Search",
+        title = stringResource(id = R.string.search_title),
         hasBookMark = true,
         onEvent = { onEvent(SearchEvent.ClickBookMark) }
     ) { _ ->
         Column {
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -225,13 +230,14 @@ fun SearchScreen(
                     hint = "Search",
                     text = query.value,
                     modifier = Modifier,
-                    focusRequester = FocusRequester(),
+                    focusRequester = focusRequester,
                     visualTransformation = VisualTransformation.None,
                     getNewString = { newText ->
                         query.value = newText
                     }
                 ) {
                     onEvent(SearchEvent.GetSearchQuery(query.value))
+                    focusManager.clearFocus()
                 }
             }
 
@@ -239,10 +245,11 @@ fun SearchScreen(
 
             // Component로 분리 예정
             if (state.isSearching) {
-                when(lazyPagingItems.itemCount){
-                    0->{
+                when (lazyPagingItems.itemCount) {
+                    0 -> {
                         //
                     }
+
                     else -> LazyVerticalGridComponent(
                         lazyPagingItems = lazyPagingItems
                     ) { photoData ->
@@ -276,26 +283,27 @@ fun DetailsScreen(
     onEvent: (DetailEvent) -> Unit
 ) {
 
-    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             CustomTopAppBar(
-                title = "Details",
+                title = stringResource(id = R.string.detail_title),
                 hasBookMark = false,
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    // 추가, 제거 관련 토스트 띄울것
-                    if (!state.photoInfo.isBookmarked) {
+                    val toastString = if (!state.photoInfo.isBookmarked) {
                         onEvent(DetailEvent.InsertBookMark)
+                        "BookMarked!"
                     } else {
                         onEvent(DetailEvent.DeleteBookMark)
+                        "BookMark Deleted!"
                     }
+                    Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
                 },
                 shape = CircleShape,
                 containerColor = Color.White,
@@ -366,7 +374,7 @@ fun BookmarksScreen(
     lazyPagingItems: LazyPagingItems<PhotoData>
 ) {
     BaseScreen(
-        title = "Bookmark",
+        title = stringResource(id = R.string.bookmark_title),
         hasBookMark = false
     ) { _ ->
         Box(modifier = Modifier.fillMaxSize()) {

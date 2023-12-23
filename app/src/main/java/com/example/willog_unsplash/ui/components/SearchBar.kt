@@ -99,8 +99,9 @@ fun SearchBar(
             keyboardType = KeyboardType.Text
         ),
         visualTransformation = visualTransformation,
-        keyboardActions = KeyboardActions(onSearch = { // '검색' 버튼 액션 정의
-            onEvent(text)
-        })
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onEvent(text)
+            })
     )
 }
