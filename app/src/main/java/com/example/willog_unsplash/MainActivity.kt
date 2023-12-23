@@ -66,6 +66,7 @@ import com.example.willog_unsplash.ui.components.CustomTopAppBar
 import com.example.willog_unsplash.ui.components.DetailInfo
 import com.example.willog_unsplash.ui.components.ErrorScreen
 import com.example.willog_unsplash.ui.components.ImageFrame
+import com.example.willog_unsplash.ui.components.LazyVerticalGridComponent
 import com.example.willog_unsplash.ui.components.LoadingWheel
 import com.example.willog_unsplash.ui.components.SearchBar
 import com.example.willog_unsplash.ui.events.BookmarkEvent
@@ -238,22 +239,14 @@ fun SearchScreen(
 
             // Component로 분리 예정
             if (state.isSearching) {
-                // 지금 로딩하면 화면 깜빡거림 이거 수정 필요
-                LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-                    items(lazyPagingItems.itemCount, key = { index ->
-                        lazyPagingItems.peek(index)?.id ?: index
-                    }) { index ->
-                        val photoData = lazyPagingItems[index]
-                        ImageFrame(
-                            image = photoData?.urls?.small ?: "",
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .border(0.5.dp, Color.White),
-                            isBookMarked = photoData?.isBookmarked ?: false
-                        ) {
-                            if (photoData != null)
-                                onEvent(SearchEvent.ClickImage(photoData))
-                        }
+                when(lazyPagingItems.itemCount){
+                    0->{
+                        //
+                    }
+                    else -> LazyVerticalGridComponent(
+                        lazyPagingItems = lazyPagingItems
+                    ) { photoData ->
+                        onEvent(SearchEvent.ClickImage(photoData))
                     }
                 }
 
@@ -377,22 +370,11 @@ fun BookmarksScreen(
         hasBookMark = false
     ) { _ ->
         Box(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-                items(lazyPagingItems.itemCount, key = { index ->
-                    lazyPagingItems.peek(index)?.id ?: index
-                }) { index ->
-                    val photoData = lazyPagingItems[index]
-                    ImageFrame(
-                        image = photoData?.urls?.small ?: "",
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .border(0.5.dp, Color.White),
-                        isBookMarked = true
-                    ) {
-                        if (photoData != null)
-                            onEvent(BookmarkEvent.ClickImage(photoData))
-                    }
-                }
+            LazyVerticalGridComponent(
+                lazyPagingItems = lazyPagingItems,
+                isBookmarked = true
+            ) { photoData ->
+                onEvent(BookmarkEvent.ClickImage(photoData))
             }
         }
     }

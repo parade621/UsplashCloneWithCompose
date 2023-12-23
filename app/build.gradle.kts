@@ -1,6 +1,7 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 import java.io.FileInputStream
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,30 +11,46 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.willog_unsplash"
     compileSdk = 33
 
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(FileInputStream(localPropertiesFile))
+    }
     defaultConfig {
         applicationId = "com.example.willog_unsplash"
         minSdk = 26
         targetSdk = 33
         versionCode = 1
-        versionName = "1.1.0"
-        multiDexEnabled = true
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        localProperties.getProperty("ACCESS_KEY")?.let {
+            buildConfigField("String", "ACCESS_KEY", "\"$it\"")
+        }
     }
 
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -45,7 +62,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.6"
@@ -54,6 +70,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
