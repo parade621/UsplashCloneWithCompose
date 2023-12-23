@@ -273,3 +273,7 @@ Japp/src/main/java/com/example/willog_unsplash/ui/components/ErrorScreen.kt,d/4
 Kapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/RootViewModel.kt,a/a/aa609a0d07403e8e428cda7a9f445a8ee5f51494
 {
 Kapp/src/main/java/com/example/willog_unsplash/ui/components/LoadingWheel.kt,d/3/d3cfd685877307ab2cf106cfc97ecbbfcae237d2
+z
+Japp/src/main/java/com/example/willog_unsplash/data/model/SearchResponse.kt,3/b/3be91fc25da968ec3003c60e8a42331bc0f5faff
+|
+Lapp/src/main/java/com/example/willog_unsplash/navigation/AppNavigatorImpl.kt,8/c/8c344ef5acb462ae539090877792327c772d8ae4

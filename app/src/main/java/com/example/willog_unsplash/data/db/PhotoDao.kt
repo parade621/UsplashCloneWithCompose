@@ -27,7 +27,6 @@ interface PhotoDao {
     @Query("SELECT * FROM photos")
     fun getBookMarkPhotos(): Flow<List<PhotoData>>
 
-    // define paging source
     @Query("SELECT * FROM photos")
     fun getBookMarkPagingPhotos(): PagingSource<Int, PhotoData>
 

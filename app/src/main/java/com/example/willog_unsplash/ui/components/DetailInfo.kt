@@ -28,7 +28,7 @@ fun DetailInfo(type: String = "type", value: String = "value") {
             color = Color.Black,
             modifier = Modifier.padding(12.dp)
         )
-        Spacer(modifier = Modifier.weight(1f)) // 여기서 남은 공간을 차지합니다.
+        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = value,
             style = typo.labelMedium,

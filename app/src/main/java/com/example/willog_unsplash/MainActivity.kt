@@ -124,8 +124,6 @@ fun Unsplash(
             val state = viewModel.state.collectAsStateWithLifecycle().value
             val lazyPagingItems = viewModel.searchPagingResult.collectAsLazyPagingItems()
 
-            Timber.e("recomposition occured!!!!")
-            // 여기서 그럼 ViewModel 리컴포지션 될 때마다 DB에서 데이터를 map으로 데이터 비교해서 UI 갱신해주기
             viewModel.onEvent(SearchEvent.GetBookmarkedPhotoId)
             SearchScreen(
                 state = state,
@@ -241,8 +239,9 @@ fun SearchScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Component로 분리 예정
             if (state.isSearching) {
+
+                // 결과 표시
                 when (lazyPagingItems.itemCount) {
                     0 -> {
                         ErrorScreen(type = "empty", message = stringResource(id = R.string.no_result_text))
@@ -255,6 +254,7 @@ fun SearchScreen(
                     }
                 }
 
+                // 상태 표시
                 when {
                     lazyPagingItems.loadState.append is LoadState.Loading -> {
                         LoadingWheel()
@@ -321,8 +321,8 @@ fun DetailsScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(backGround) // 기본 배경색 지정
-                    .padding(paddingValues), // Scaffold로부터 제공받는 padding 적용
+                    .background(backGround)
+                    .padding(paddingValues),
                 contentAlignment = Alignment.TopStart
             ) {
                 Column {

@@ -32,7 +32,7 @@ class PhotoSearchRepoImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
-                enablePlaceholders = true, // true로 변경
+                enablePlaceholders = true,
                 maxSize = PAGING_SIZE * 8
             ),
             pagingSourceFactory = {
