@@ -68,12 +68,15 @@ import com.example.willog_unsplash.ui.components.ErrorScreen
 import com.example.willog_unsplash.ui.components.ImageFrame
 import com.example.willog_unsplash.ui.components.LoadingWheel
 import com.example.willog_unsplash.ui.components.SearchBar
+import com.example.willog_unsplash.ui.events.BookmarkEvent
 import com.example.willog_unsplash.ui.events.DetailEvent
 import com.example.willog_unsplash.ui.events.SearchEvent
+import com.example.willog_unsplash.ui.states.BookmarkState
 import com.example.willog_unsplash.ui.states.DetailState
 import com.example.willog_unsplash.ui.states.SearchState
 import com.example.willog_unsplash.ui.theme.Willog_UnsplashTheme
 import com.example.willog_unsplash.ui.theme.backGround
+import com.example.willog_unsplash.ui.viewmodel.BookmarkViewModel
 import com.example.willog_unsplash.ui.viewmodel.DetailViewModel
 import com.example.willog_unsplash.ui.viewmodel.RootViewModel
 import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
@@ -123,6 +126,9 @@ fun Unsplash(
             val state = viewModel.state.collectAsStateWithLifecycle().value
             val lazyPagingItems = viewModel.searchPagingResult.collectAsLazyPagingItems()
 
+            Timber.e("recomposition occured!!!!")
+            // 여기서 그럼 ViewModel 리컴포지션 될 때마다 DB에서 데이터를 map으로 데이터 비교해서 UI 갱신해주기
+            viewModel.onEvent(SearchEvent.GetBookmarkedPhotoId)
             SearchScreen(
                 state = state,
                 onEvent = viewModel::onEvent,
@@ -134,21 +140,32 @@ fun Unsplash(
             route = Screens.DetailScreen.route.plus("/{$IntentValue}")
         ) { backStackEntry ->
             val viewModel: DetailViewModel = hiltViewModel()
-            viewModel.onEvent(
-                DetailEvent.FetchPhotoInfo(
-                    backStackEntry.arguments?.getString(
-                        IntentValue
-                    ) ?: ""
-                )
-            )
             val state = viewModel.state.collectAsStateWithLifecycle().value
+            if (!state.init) {
+                viewModel.onEvent(
+                    DetailEvent.FetchPhotoInfo(
+                        backStackEntry.arguments?.getString(
+                            IntentValue
+                        ) ?: ""
+                    )
+                )
+            }
             DetailsScreen(state = state, onEvent = viewModel::onEvent)
         }
 
         composable(
             route = Screens.BookMarkScreen.route
         ) {
-            BookmarksScreen()
+            val viewModel: BookmarkViewModel = hiltViewModel()
+            val state = viewModel.state.collectAsStateWithLifecycle().value
+            val lazyPagingItems = viewModel.bookmarkPagingResult.collectAsLazyPagingItems()
+
+            viewModel.onEvent(BookmarkEvent.LoadBookmark)
+            BookmarksScreen(
+                state = state,
+                onEvent = viewModel::onEvent,
+                lazyPagingItems = lazyPagingItems
+            )
         }
     }
 }
@@ -231,7 +248,8 @@ fun SearchScreen(
                             image = photoData?.urls?.small ?: "",
                             modifier = Modifier
                                 .aspectRatio(1f)
-                                .border(0.5.dp, Color.White)
+                                .border(0.5.dp, Color.White),
+                            isBookMarked = photoData?.isBookmarked ?: false
                         ) {
                             if (photoData != null)
                                 onEvent(SearchEvent.ClickImage(photoData))
@@ -279,6 +297,7 @@ fun DetailsScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    // 추가, 제거 관련 토스트 띄울것
                     if (!state.photoInfo.isBookmarked) {
                         onEvent(DetailEvent.InsertBookMark)
                     } else {
@@ -348,19 +367,33 @@ fun DetailsScreen(
 
 
 @Composable
-fun BookmarksScreen() {
+fun BookmarksScreen(
+    state: BookmarkState = BookmarkState(),
+    onEvent: (BookmarkEvent) -> Unit,
+    lazyPagingItems: LazyPagingItems<PhotoData>
+) {
     BaseScreen(
         title = "Bookmark",
         hasBookMark = false
     ) { _ ->
-
-        // TODO: 북마크된 이미지 목록 표시
-        LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-//            items(images.size) { index ->
-//                ImageFrame(/*image = image.url*/) {
-//                    //navController.navigate("details/${image.id}")
-//                }
-//            }
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+                items(lazyPagingItems.itemCount, key = { index ->
+                    lazyPagingItems.peek(index)?.id ?: index
+                }) { index ->
+                    val photoData = lazyPagingItems[index]
+                    ImageFrame(
+                        image = photoData?.urls?.small ?: "",
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .border(0.5.dp, Color.White),
+                        isBookMarked = true
+                    ) {
+                        if (photoData != null)
+                            onEvent(BookmarkEvent.ClickImage(photoData))
+                    }
+                }
+            }
         }
     }
 }

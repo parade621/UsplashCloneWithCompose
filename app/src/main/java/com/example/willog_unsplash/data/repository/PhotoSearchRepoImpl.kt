@@ -53,6 +53,10 @@ class PhotoSearchRepoImpl @Inject constructor(
         return db.photoDao().getAllBookmarkData()
     }
 
+    override suspend fun getAllBookmarkId(): List<String> {
+        return db.photoDao().getAllBookmarkId()
+    }
+
     override fun getBookmarkedPhotos(): Flow<PagingData<PhotoData>> {
         val pagingSourceFactory: () -> PagingSource<Int, PhotoData> =
             { db.photoDao().getBookMarkPagingPhotos() }

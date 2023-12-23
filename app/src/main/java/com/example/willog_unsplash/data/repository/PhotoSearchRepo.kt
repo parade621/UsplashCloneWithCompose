@@ -17,6 +17,8 @@ interface PhotoSearchRepo {
 
     suspend fun getAllBookmarkData(): List<PhotoData>
 
+    suspend fun getAllBookmarkId(): List<String>
+
     fun getBookmarkedPhotos(): Flow<PagingData<PhotoData>>
 
 }

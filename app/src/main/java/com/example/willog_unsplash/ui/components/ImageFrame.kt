@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import timber.log.Timber
 fun ImageFrame(
     image: String = "",
     modifier: Modifier = Modifier,
+    isBookMarked: Boolean = false,
     onEvent: () -> Unit = {}
 ) {
     Box(
@@ -36,6 +38,14 @@ fun ImageFrame(
                 .fillMaxSize(),
             previewPlaceholder = /*이미지가 없을 때*/ R.drawable.ic_launcher_foreground,
         )
+
+        if (isBookMarked) {
+            BookMark(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(3.dp),
+            )
+        }
     }
 }
 

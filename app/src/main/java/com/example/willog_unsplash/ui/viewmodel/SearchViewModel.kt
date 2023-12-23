@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.example.willog_unsplash.data.model.PhotoData
 import com.example.willog_unsplash.data.repository.PhotoSearchRepo
 import com.example.willog_unsplash.navigation.AppNavigator
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -34,6 +36,8 @@ class SearchViewModel @Inject constructor(
     private val moshi: Moshi
 ) : ViewModel() {
 
+    private var dbDatas = setOf<String>()
+
     private val _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
 
@@ -42,11 +46,22 @@ class SearchViewModel @Inject constructor(
         MutableStateFlow<PagingData<PhotoData>>(PagingData.empty())
     val searchPagingResult: StateFlow<PagingData<PhotoData>> = _searchPagingResult.asStateFlow()
 
+
     fun onEvent(event: SearchEvent) {
         when (event) {
+            is SearchEvent.GetBookmarkedPhotoId -> getBookmarkedPhotoId()
+            is SearchEvent.ClickBookMark -> clickBookMark()
             is SearchEvent.GetSearchQuery -> searchImage(event.query)
             is SearchEvent.ClickImage -> clickImage(event.selectedImage)
-            is SearchEvent.ClickBookMark -> clickBookMark()
+        }
+    }
+
+    private fun getBookmarkedPhotoId() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val tmpData = photoSearchRepo.getAllBookmarkId()
+            dbDatas = tmpData.toSet()
+            Timber.e("갱신: $dbDatas")
+
         }
     }
 
@@ -57,6 +72,11 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             photoSearchRepo.searchPhotosPaging(query)
                 .cachedIn(viewModelScope)
+                .map { pagingData ->
+                    pagingData.map { photo ->
+                        photo.copy(isBookmarked = dbDatas.contains(photo.id))
+                    }
+                }
                 .collect { pagingData ->
                     _searchPagingResult.value = pagingData
                 }
@@ -80,9 +100,5 @@ class SearchViewModel @Inject constructor(
             Screens.BookMarkScreen(),
             popUpToRoute = Screens.SearchScreen(),
         )
-    }
-
-    private fun navBack() {
-        appNavigator.tryNavigateBack()
     }
 }

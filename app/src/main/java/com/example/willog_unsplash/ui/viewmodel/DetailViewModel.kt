@@ -20,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val appNavigator: AppNavigator,
-    private val moshi: Moshi,
-    private val photoSearchRepo: PhotoSearchRepo
+    private val photoSearchRepo: PhotoSearchRepo,
+    private val moshi: Moshi
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DetailState())
@@ -39,6 +39,9 @@ class DetailViewModel @Inject constructor(
 
     private fun fetchPhotoInfo(photoData: String) {
 
+        _state.update {
+            it.copy(init = true)
+        }
         if (photoData.isEmpty()) {
             _state.update {
                 it.copy(photoInfo = PhotoData())
@@ -51,34 +54,36 @@ class DetailViewModel @Inject constructor(
         photoDataJson.let { newData ->
             //_state.value = _state.value.copy(photoInfo = newData)
             _state.update {
-                it.copy(photoInfo = newData)
+                it.copy(
+                    photoInfo = newData
+                )
             }
         }
     }
 
     private fun insertBookMark() {
-        Timber.e("${state.value.photoInfo.isBookmarked} 이걸 바꿀거야")
-        _state.update {
-            it.copy(
-                photoInfo =
-                _state.value.photoInfo.copy(isBookmarked = true)
-            )
-        }
-        Timber.e("값 바뀜? ${state.value.photoInfo.isBookmarked}")
         viewModelScope.launch(Dispatchers.IO) {
+            Timber.e("${state.value.photoInfo.isBookmarked} 이걸 바꿀거야")
             photoSearchRepo.insertBookMark(state.value.photoInfo)
+            _state.update {
+                it.copy(
+                    photoInfo =
+                    _state.value.photoInfo.copy(isBookmarked = true)
+                )
+            }
+            Timber.e("값 바뀜? ${state.value.photoInfo.isBookmarked}")
         }
     }
 
     private fun deleteBookMark() {
-        _state.update {
-            it.copy(
-                photoInfo =
-                _state.value.photoInfo.copy(isBookmarked = false)
-            )
-        }
         viewModelScope.launch(Dispatchers.IO) {
             photoSearchRepo.deleteBookMark(state.value.photoInfo)
+            _state.update {
+                it.copy(
+                    photoInfo =
+                    _state.value.photoInfo.copy(isBookmarked = false)
+                )
+            }
         }
     }
 

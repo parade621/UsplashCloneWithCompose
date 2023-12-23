@@ -21,6 +21,9 @@ interface PhotoDao {
     @Query("SELECT * FROM photos")
     suspend fun getAllBookmarkData(): List<PhotoData>
 
+    @Query("SELECT id FROM photos")
+    suspend fun getAllBookmarkId(): List<String>
+
     @Query("SELECT * FROM photos")
     fun getBookMarkPhotos(): Flow<List<PhotoData>>
 

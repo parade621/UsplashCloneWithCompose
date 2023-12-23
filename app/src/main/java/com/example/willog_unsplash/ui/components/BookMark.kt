@@ -17,7 +17,6 @@ import com.example.willog_unsplash.R
 @Composable
 fun BookMark(
     modifier: Modifier = Modifier,
-    isBookMark: Boolean = true,
     onBookMarkClick: () -> Unit = {}
 ) {
 
