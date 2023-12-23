@@ -2,7 +2,6 @@ package com.example.willog_unsplash.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -17,16 +16,12 @@ import com.example.willog_unsplash.R
 @Composable
 fun BookMark(
     modifier: Modifier = Modifier,
-    onBookMarkClick: () -> Unit = {}
 ) {
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(Color.Transparent)
-            .clickable(
-                onClick = onBookMarkClick,
-            )
     ) {
         Image(
             painter = painterResource(id = R.drawable.vector_favorite),

@@ -269,3 +269,7 @@ u
 Eapp/src/main/java/com/example/willog_unsplash/data/api/UnsplashApi.kt,0/b/0b31a43a82df0ac473efa4d5f9a7c96b93cde65a
 z
 Japp/src/main/java/com/example/willog_unsplash/ui/components/ErrorScreen.kt,d/4/d40cbc33e7d5da1af85dc32dba0f6a5a77c11618
+{
+Kapp/src/main/java/com/example/willog_unsplash/ui/viewmodel/RootViewModel.kt,a/a/aa609a0d07403e8e428cda7a9f445a8ee5f51494
+{
+Kapp/src/main/java/com/example/willog_unsplash/ui/components/LoadingWheel.kt,d/3/d3cfd685877307ab2cf106cfc97ecbbfcae237d2
