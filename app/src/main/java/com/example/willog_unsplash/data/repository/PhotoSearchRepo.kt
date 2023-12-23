@@ -7,7 +7,16 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface PhotoSearchRepo {
-    suspend fun searchPhotos(query: String, page: Int, perPage: Int): Response<SearchResponse>
-
+    // Paging Api 호출
     fun searchPhotosPaging(query: String): Flow<PagingData<PhotoData>>
+
+    // DB DAO
+    suspend fun insertBookMark(photo: PhotoData)
+
+    suspend fun deleteBookMark(photo: PhotoData)
+
+    suspend fun getAllBookmarkData(): List<PhotoData>
+
+    fun getBookmarkedPhotos(): Flow<PagingData<PhotoData>>
+
 }

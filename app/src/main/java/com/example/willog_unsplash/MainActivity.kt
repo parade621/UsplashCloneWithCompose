@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.willog_unsplash
 
 import android.annotation.SuppressLint
@@ -22,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,6 +80,7 @@ import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import timber.log.Timber
 import java.net.URLEncoder
 
 const val IntentValue = "IntentValue"
@@ -150,7 +154,6 @@ fun Unsplash(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseScreen(
     hasBookMark: Boolean = false,
@@ -256,7 +259,6 @@ fun SearchScreen(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
     state: DetailState = DetailState(),
@@ -276,12 +278,22 @@ fun DetailsScreen(
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* 클릭 시 수행할 액션 */ },
+                onClick = {
+                    if (!state.photoInfo.isBookmarked) {
+                        onEvent(DetailEvent.InsertBookMark)
+                    } else {
+                        onEvent(DetailEvent.DeleteBookMark)
+                    }
+                },
                 shape = CircleShape,
                 containerColor = Color.White,
             ) {
                 Icon(
-                    Icons.Filled.FavoriteBorder,
+                    imageVector = if (!state.photoInfo.isBookmarked) {
+                        Icons.Filled.FavoriteBorder
+                    } else {
+                        Icons.Filled.Favorite
+                    },
                     contentDescription = "BookMark",
                     tint = Color.Red
                 )
@@ -302,8 +314,8 @@ fun DetailsScreen(
                             .fillMaxWidth()
                             .padding(12.dp),
                     ) {
-                        ImageFrame(/*image = image.url*/
-                            image = state.photoInfo!!.urls.raw,
+                        ImageFrame(
+                            image = state.photoInfo.urls.raw,
                             modifier = Modifier
                                 .fillMaxHeight(0.5f)
                                 .fillMaxWidth()
@@ -317,7 +329,7 @@ fun DetailsScreen(
                             .padding(12.dp)
                             .background(Color.White, shape = RoundedCornerShape(10.dp)),
                     ) {
-                        DetailInfo(type = "ID", value = state.photoInfo!!.id)
+                        DetailInfo(type = "ID", value = state.photoInfo.id)
                         Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)
                         DetailInfo(type = "Author", value = state.photoInfo.user.username)
                         Divider(color = Color(0xFFE9E9E9), thickness = 1.dp)

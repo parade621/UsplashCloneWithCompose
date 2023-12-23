@@ -19,6 +19,9 @@ interface PhotoDao {
     suspend fun deleteBookMark(photo: PhotoData)
 
     @Query("SELECT * FROM photos")
+    suspend fun getAllBookmarkData(): List<PhotoData>
+
+    @Query("SELECT * FROM photos")
     fun getBookMarkPhotos(): Flow<List<PhotoData>>
 
     // define paging source
