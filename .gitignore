@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+
+# sonarlint
+/.idea/sonarlint/issuestore/
+/.idea/sonarlint/securityhotspotstore/
