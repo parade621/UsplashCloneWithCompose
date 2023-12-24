@@ -81,7 +81,6 @@ import com.example.willog_unsplash.ui.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import timber.log.Timber
 import java.net.URLEncoder
 
 const val IntentValue = "IntentValue"
@@ -228,7 +227,7 @@ fun SearchScreen(
                         query.value = newText
                     }
                 ) {
-                    if(query.value.isEmpty()) {
+                    if (query.value.isEmpty()) {
                         Toast.makeText(context, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
                         return@SearchBar
                     }
@@ -241,17 +240,10 @@ fun SearchScreen(
 
             if (state.isSearching) {
 
-                // 결과 표시
-                when (lazyPagingItems.itemCount) {
-                    0 -> {
-                        ErrorScreen(type = "empty", message = stringResource(id = R.string.no_result_text))
-                    }
-
-                    else -> LazyVerticalGridComponent(
-                        lazyPagingItems = lazyPagingItems
-                    ) { photoData ->
-                        onEvent(SearchEvent.ClickImage(photoData))
-                    }
+                LazyVerticalGridComponent(
+                    lazyPagingItems = lazyPagingItems
+                ) { photoData ->
+                    onEvent(SearchEvent.ClickImage(photoData))
                 }
 
                 // 상태 표시
@@ -267,6 +259,10 @@ fun SearchScreen(
                     lazyPagingItems.loadState.refresh is LoadState.Error -> {
                         val e = lazyPagingItems.loadState.refresh as LoadState.Error
                         ErrorScreen(type = "error", message = e.error.message ?: "")
+                    }
+
+                    lazyPagingItems.itemCount == 0 -> {
+                        ErrorScreen(type = "empty", message = "검색 결과가 없습니다.")
                     }
                 }
             }

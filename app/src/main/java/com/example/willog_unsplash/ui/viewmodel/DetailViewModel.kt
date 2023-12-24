@@ -33,7 +33,6 @@ class DetailViewModel @Inject constructor(
             is DetailEvent.InsertBookMark -> insertBookMark()
             is DetailEvent.DeleteBookMark -> deleteBookMark()
             is DetailEvent.NavBack -> navBack()
-            else -> {} //?
         }
     }
 
@@ -63,7 +62,6 @@ class DetailViewModel @Inject constructor(
 
     private fun insertBookMark() {
         viewModelScope.launch(Dispatchers.IO) {
-            Timber.e("${state.value.photoInfo.isBookmarked} 이걸 바꿀거야")
             photoSearchRepo.insertBookMark(state.value.photoInfo)
             _state.update {
                 it.copy(
@@ -71,7 +69,6 @@ class DetailViewModel @Inject constructor(
                     _state.value.photoInfo.copy(isBookmarked = true)
                 )
             }
-            Timber.e("값 바뀜? ${state.value.photoInfo.isBookmarked}")
         }
     }
 

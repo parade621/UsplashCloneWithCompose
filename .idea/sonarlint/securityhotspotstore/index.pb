@@ -277,3 +277,5 @@ z
 Japp/src/main/java/com/example/willog_unsplash/data/model/SearchResponse.kt,3/b/3be91fc25da968ec3003c60e8a42331bc0f5faff
 |
 Lapp/src/main/java/com/example/willog_unsplash/navigation/AppNavigatorImpl.kt,8/c/8c344ef5acb462ae539090877792327c772d8ae4
+w
+Gapp/src/main/java/com/example/willog_unsplash/utils/RepositoryModule.kt,8/1/81757b92a7c167f283d4c1f313acc23f2e3a8f1c

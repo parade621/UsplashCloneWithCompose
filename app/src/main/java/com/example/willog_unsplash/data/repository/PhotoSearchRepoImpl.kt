@@ -27,8 +27,6 @@ class PhotoSearchRepoImpl @Inject constructor(
         query: String
     ): Flow<PagingData<PhotoData>> {
 
-        Timber.e("와우")
-
         return Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
