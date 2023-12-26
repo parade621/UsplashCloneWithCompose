@@ -5,8 +5,8 @@
 2023년 12월 윌로그 Android 개발자 채용 코딩테스트 과제에 참여할 기회를 주신 것에 감사드립니다.
 
 
-### 1. 과제 설명
-* 이미지를 검색해서 북마크로 수집하는 Unsplash 클론 앱을 만들어 주세요.
+### 1. 프로젝트 설명
+* 이미지를 검색해서 북마크로 수집하는 Unsplash 클론 앱
 
 * 이미지 검색 API (https://api.unsplash.com/search/photos)의 results 필드
 
