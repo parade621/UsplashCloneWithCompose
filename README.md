@@ -8,7 +8,7 @@
 * 이미지 검색 API (https://api.unsplash.com/search/photos)의 results 필드
 
 * UI는 (Search, Detail, Bookmark)3개의 Screen을 사용합니다.
-  
+```
 * 첫 번째 Screen : 검색 결과
 검색어를 입력할 수 있습니다.
 검색된 이미지 리스트가 그리드로 나타납니다.북마크가 된 아이템의 경우, 북마크 아이콘과 함께 표시됩니다.
@@ -22,7 +22,7 @@
 * 세 번째 Screen : 북마크 리스트
 북마크로 저장된 이미지들을 보여줍니다.
 이미지를 선택하여 Detail Screen으로 이동할 수 있습니다.
-
+```
 
 ### 2. 사용된 라이브러리
 * Retrofit2 (API 통신)
