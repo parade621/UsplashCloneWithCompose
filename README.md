@@ -1,6 +1,7 @@
 # Unsplash Clone _ with compose
 
-## API KEY 값을 포함하지 않으므로 참고 부탁드립니다.
+### 📢 API KEY 값을 포함하지 않으므로 참고 부탁드립니다.
+- https://unsplash.com/developers 여기서 'Register as a developer'로 API ACCESS_KEY를 배정 받으신 후, local.properties에 ACCESSKEY = YOUR_ACCESS_KEY로 입력 바랍니다.
 
 ### 1. 프로젝트 설명
 * 이미지를 검색해서 북마크로 수집하는 Unsplash 클론 앱
