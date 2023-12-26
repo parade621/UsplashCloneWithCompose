@@ -37,4 +37,3 @@
 * Glide for Compose (이미지 표시)
 * Timber (로그)
 
-### 3. 트러블 슈팅
