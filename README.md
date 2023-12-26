@@ -5,6 +5,7 @@
 
 ### 1. 프로젝트 설명
 * 이미지를 검색해서 북마크로 수집하는 Unsplash 클론 앱
+* ![photo](https://github.com/parade621/Usplash_clone_with_compose/assets/36446270/3ba67de8-5048-474f-975e-7d17cdfbed22)
 
 * 이미지 검색 API (https://api.unsplash.com/search/photos)의 results 필드
 
