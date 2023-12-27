@@ -25,6 +25,7 @@
 - 북마크로 저장된 이미지들을 보여줍니다.
 - 이미지를 선택하여 Detail Screen으로 이동할 수 있습니다.
 ```
+---
 
 ### 2. 사용된 라이브러리
 * Jetpack Compose (UI)
@@ -36,6 +37,8 @@
 * Moshi (JSON 파싱)
 * Glide for Compose (이미지 표시)
 * Timber (로그)
+
+---
 
 ### 3. 제출 후 받은 피드백
 
