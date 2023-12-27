@@ -58,7 +58,7 @@ A: 결국 사용되는 데이터는 id, Author, width, height, url, bookmark 여
 **feedback 5) DI 를 Object 안에 구현하면 DI 라이브러리를 사용하는 의미가 많이 없어보인다.**
 
 A: 이게 제일 이해가 안가는데, 사실 이 피드백은 준 사람이 Hilt/Dagger에 대한 이해가 없다고 생각된다.
-[공식문서] (https://developer.android.com/training/dependency-injection/hilt-android?hl=ko#hilt-modules)에서 확인 가능한 구글이 권장하는 방식을 '아쉽다'로 일축하는 부분에 일단 거를 타선이라 생각되었다.
+![공식문서](https://developer.android.com/training/dependency-injection/hilt-android?hl=ko#hilt-modules) 에서 확인 가능한 구글이 권장하는 방식을 '아쉽다'로 일축하는 부분에 일단 거를 타선이라 생각되었다.
   
 **feedback 6) MainActivity 내부에 모든 화면에 대한 UI 구현이 있는 부분도 아쉽다.**
 
