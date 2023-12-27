@@ -71,6 +71,7 @@ A: 결국 사용되는 데이터는 id, Author, width, height, url, bookmark 여
 **feedback 5) DI 를 Object 안에 구현하면 DI 라이브러리를 사용하는 의미가 많이 없어보인다.**
 
 A: 이 피드백은 준 사람이 Hilt/Dagger에 대한 이해가 없다고 생각된다.<br/>
+피드백을 준 당신이 Provide 함수만 포함하는 모듈을 어떻게 더 의미있고 효율적으로 사용 중인지 궁금하다.<br/>
 [공식문서](https://developer.android.com/training/dependency-injection/hilt-android?hl=ko#hilt-modules) 에서 확인 가능한 구글이 권장하는 방식을 '아쉽다'로 일축하는 부분에 일단 거를 타선이라 생각되었다.<br/>
 같이 보면 좋을거 [https://developer.android.com/codelabs/android-hilt?hl=ko#6](https://developer.android.com/codelabs/android-hilt?hl=ko#6)
 <br/>
