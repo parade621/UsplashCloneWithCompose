@@ -12,7 +12,7 @@ plugins {
 
 android {
 
-    namespace = "com.example.willog_unsplash"
+    namespace = "com.sample.unsplash_clone"
     compileSdk = 33
 
     val localProperties = Properties()
@@ -21,7 +21,7 @@ android {
         localProperties.load(FileInputStream(localPropertiesFile))
     }
     defaultConfig {
-        applicationId = "com.example.willog_unsplash"
+        applicationId = "com.sample.unsplash_clone"
         minSdk = 26
         targetSdk = 33
         versionCode = 1
