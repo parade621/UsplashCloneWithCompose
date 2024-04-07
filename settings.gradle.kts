@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "willog_Unsplash"
+rootProject.name = "unsplash_clone"
 include(":app")

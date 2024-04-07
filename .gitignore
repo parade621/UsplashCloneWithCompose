@@ -16,5 +16,6 @@ local.properties
 
 
 # sonarlint
+/.idea/sonarlint/*
 /.idea/sonarlint/issuestore/
 /.idea/sonarlint/securityhotspotstore/
